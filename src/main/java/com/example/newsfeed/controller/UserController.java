@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/signup")
     public void signup(@Validated @RequestBody SignupRequestDto signupRequestDto){
-//        userService.signup(signupRequestDto);
+        userService.signup((signupRequestDto));
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.newsfeed.entity;
 
+import com.example.newsfeed.dto.SignupRequestDto;
+import com.example.newsfeed.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +29,14 @@ public class User {
     @Column
     private String profile;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Menu> menu;
+//    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    private List<Menu> menu;
 
+    public User(SignupRequestDto signupRequestDto){
+        this.username = signupRequestDto.getUsername();
+        this.pwd = signupRequestDto.getPwd();
+        this.nickname = signupRequestDto.getNickname();
+        this.email = signupRequestDto.getEmail();
+        this.profile = signupRequestDto.getProfile();
+    }
 }
