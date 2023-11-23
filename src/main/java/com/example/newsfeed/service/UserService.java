@@ -1,5 +1,6 @@
 package com.example.newsfeed.service;
 
+
 import com.example.newsfeed.dto.LoginRequestDto;
 import com.example.newsfeed.dto.SignupRequestDto;
 import com.example.newsfeed.entity.User;
@@ -51,4 +52,5 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
+
 }

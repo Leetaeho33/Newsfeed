@@ -42,6 +42,7 @@ public class User {
         this.profile = profile;
     }
 
+
     public User(SignupRequestDto signupRequestDto){
         this.username = signupRequestDto.getUsername();
         this.pwd = signupRequestDto.getPwd();
