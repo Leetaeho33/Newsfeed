@@ -1,13 +1,16 @@
 package com.example.newsfeed.service;
 
-
 import com.example.newsfeed.dto.LoginRequestDto;
+import com.example.newsfeed.dto.PwdCheckRequestDto;
+import com.example.newsfeed.dto.UserResponseDto;
+import com.example.newsfeed.dto.UserUpdateRequestdTO;
 import com.example.newsfeed.dto.SignupRequestDto;
 import com.example.newsfeed.entity.User;
 import com.example.newsfeed.repository.UserRepository;
-import com.fasterxml.jackson.core.SerializableString;
+import com.example.newsfeed.userdetails.UserDetailsImpl;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private User user;
-    private String username, email, nickname, pwd, profile;
+    private String username, email, nickname, pwd, profile, pwdcheck;
     private final PasswordEncoder passwordEncoder;
     Optional<User> userOptional;
     public void signup(SignupRequestDto signupRequestDto) {
@@ -53,4 +56,28 @@ public class UserService {
         }
     }
 
+    public UserResponseDto viewMypage(UserDetailsImpl userDetails){
+        if(userDetails!=null) {
+            user = userDetails.getUser();
+        } else {
+            throw new NullPointerException("로그인 된 회원이 아닙니다.");
+        }
+        return new UserResponseDto(user);
+    }
+    public void checkPwd(PwdCheckRequestDto pwdCheckRequestDto, UserDetailsImpl userDetails){
+        pwd = pwdCheckRequestDto.getPwd();
+        pwdcheck = userDetails.getUser().getPwd();
+        if(!passwordEncoder.matches(pwd, pwdcheck)){
+            System.out.println(pwdcheck);
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    @Transactional
+    public UserResponseDto updateUserService(UserUpdateRequestdTO userUpdateRequestdTO, UserDetailsImpl userDetails) {
+        user = userDetails.getUser();
+        user.updateUser(userUpdateRequestdTO);
+        userRepository.save(user);
+        return new UserResponseDto(user);
+    }
 }

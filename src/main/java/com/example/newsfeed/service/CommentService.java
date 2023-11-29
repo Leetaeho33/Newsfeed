@@ -26,17 +26,17 @@ public class CommentService {
     private Menu menu;
     private Comment comment;
 
-    public MenuResponseDto creataComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+    public CommentResponseDto creataComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
         user = userDetails.getUser();
         menu = getMenuById(commentRequestDto.getMenuId());
         Comment comment = new Comment(commentRequestDto, user, menu);
         menu.addComment(comment);
         commenetRepository.save(comment);
-        return new MenuResponseDto(menu);
+        return new CommentResponseDto(comment);
     }
 
     @Transactional
-    public MenuResponseDto updateComment(CommentRequestDto commentRequestDto,
+    public CommentResponseDto updateComment(CommentRequestDto commentRequestDto,
                                          UserDetailsImpl userDetails, Long commentId) {
         user = userDetails.getUser();
         menu = getMenuById(commentRequestDto.getMenuId());
@@ -46,7 +46,7 @@ public class CommentService {
         }else{
             throw new RejectedExecutionException("작성자만 수정할 수 있습니다.");
         }
-        return new MenuResponseDto(menu);
+        return new CommentResponseDto(comment);
     }
     @Transactional
     public MenuResponseDto deleteComment(CommentRequestDto commentRequestDto,
@@ -68,6 +68,6 @@ public class CommentService {
     }
     public Comment getCommentById(Long commentId){
         return comment = commenetRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 ID 입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 ID 입니다."));
     }
 }

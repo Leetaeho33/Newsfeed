@@ -10,17 +10,18 @@ import java.net.UnknownServiceException;
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentResponseDto {
-    Menu menu;
+public class CommentResponseDto extends CommonResponseDto{
+    Long id;
     String text;
-    User user;
+    String commentAuthor;
     LocalDateTime createdAt;
     LocalDateTime modifiedAt;
 
     public CommentResponseDto(Comment comment) {
-        this.menu = comment.getMenu();
+        this.id = comment.getId();
         this.text = comment.getText();
-        this.user = comment.getUser();
-        this.createdAt = LocalDateTime.now();
+        this.commentAuthor = comment.getUser().getNickname();
+        this.createdAt = comment.getCreatedAt();
+        this.modifiedAt = comment.getModifiedAt();
     }
 }
