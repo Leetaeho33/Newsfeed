@@ -12,6 +12,7 @@ import java.util.List;
 
 @Getter
 public class MenuResponseDto extends CommonResponseDto{
+    private Long id;
     private String title;
     private String content;
     private String authorNickname;
@@ -20,6 +21,7 @@ public class MenuResponseDto extends CommonResponseDto{
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public MenuResponseDto(Menu menu) {
+        this.id = menu.getId();
         this.title = menu.getTitle();
         this.content = menu.getContent();
         this.authorNickname = menu.getUser().getNickname();
