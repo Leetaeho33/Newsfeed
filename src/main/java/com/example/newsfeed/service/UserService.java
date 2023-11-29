@@ -3,13 +3,12 @@ package com.example.newsfeed.service;
 import com.example.newsfeed.dto.LoginRequestDto;
 import com.example.newsfeed.dto.PwdCheckRequestDto;
 import com.example.newsfeed.dto.UserResponseDto;
-import com.example.newsfeed.dto.UserUpdateRequestdTO;
+import com.example.newsfeed.dto.UserUpdateRequestDto;
 import com.example.newsfeed.dto.SignupRequestDto;
 import com.example.newsfeed.entity.User;
 import com.example.newsfeed.repository.UserRepository;
 import com.example.newsfeed.userdetails.UserDetailsImpl;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,7 +73,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateUserService(UserUpdateRequestdTO userUpdateRequestdTO, UserDetailsImpl userDetails) {
+    public UserResponseDto updateUserService(UserUpdateRequestDto userUpdateRequestdTO, UserDetailsImpl userDetails) {
         user = userDetails.getUser();
         user.updateUser(userUpdateRequestdTO);
         userRepository.save(user);

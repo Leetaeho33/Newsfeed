@@ -93,7 +93,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CommonResponseDto> update(@RequestBody UserUpdateRequestdTO userRequestDto,
+    public ResponseEntity<CommonResponseDto> update(@RequestBody UserUpdateRequestDto userRequestDto,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
         UserResponseDto userResponseDto;
         try {

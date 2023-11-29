@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class UserUpdateRequestdTO {
+public class UserUpdateRequestDto {
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
     @Size(min= 2, max= 5, message = "닉네임의 길이는 2~5글자 사이입니다.")
     String nickname;
