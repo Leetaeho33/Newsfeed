@@ -1,7 +1,7 @@
 package com.example.newsfeed.controller;
 
+import com.example.newsfeed.dto.*;
 import com.example.newsfeed.dto.CommentRequestDto;
-import com.example.newsfeed.dto.MenuResponseDto;
 import com.example.newsfeed.service.CommentService;
 import com.example.newsfeed.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.RejectedExecutionException;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,23 +20,43 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<MenuResponseDto> post(@RequestBody CommentRequestDto commentRequestDto,
-                                                @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<CommonResponseDto> post(@RequestBody CommentRequestDto commentRequestDto,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
+        CommentResponseDto commentResponseDto;
+        try{
+            commentResponseDto = commentService.creataComment(commentRequestDto,userDetails);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
         return ResponseEntity.status(HttpStatus.OK.value()).
-                body(commentService.creataComment(commentRequestDto,userDetails));
+                body(commentResponseDto);
     }
-    @PutMapping("/{commentId}")
-    public ResponseEntity<MenuResponseDto> update(@RequestBody CommentRequestDto commentRequestDto,
+    @PutMapping("/comment/{commentId}")
+    public ResponseEntity<CommonResponseDto> update(@RequestBody CommentRequestDto commentRequestDto,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                   @PathVariable Long commentId){
+        CommentResponseDto commentResponseDto;
+        try{
+            commentResponseDto = commentService.updateComment(commentRequestDto, userDetails, commentId);
+        } catch (IllegalArgumentException | RejectedExecutionException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
         return ResponseEntity.status(HttpStatus.OK.value()).
-                body(commentService.updateComment(commentRequestDto, userDetails, commentId));
+                body(commentResponseDto);
     }
-    @DeleteMapping("{commentId}")
-    public ResponseEntity<MenuResponseDto> delete(@RequestBody CommentRequestDto commentRequestDto,
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<CommonResponseDto> delete(@RequestBody CommentRequestDto commentRequestDto,
                                                   @AuthenticationPrincipal UserDetailsImpl userDetails,
                                                   @PathVariable Long commentId) {
+        MenuResponseDto menuResponseDto;
+        try{
+            menuResponseDto = commentService.deleteComment(commentRequestDto, userDetails, commentId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        } catch (RejectedExecutionException e){
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
         return ResponseEntity.status(HttpStatus.OK.value()).
-                body(commentService.deleteComment(commentRequestDto, userDetails, commentId));
+                body(menuResponseDto);
     }
 }

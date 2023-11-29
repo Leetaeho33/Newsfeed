@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-public class MenuResponseDto {
+public class MenuResponseDto extends CommonResponseDto{
     private String title;
     private String content;
     private String authorNickname;

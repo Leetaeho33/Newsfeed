@@ -1,28 +1,22 @@
 package com.example.newsfeed.controller;
 
-
-import com.example.newsfeed.dto.CommonResponseDto;
-import com.example.newsfeed.dto.LoginRequestDto;
+import com.example.newsfeed.dto.*;
 import com.example.newsfeed.dto.SignupRequestDto;
 import com.example.newsfeed.jwt.JwtUtil;
 import com.example.newsfeed.service.UserService;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.newsfeed.userdetails.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @Slf4j
@@ -45,8 +39,12 @@ public class UserController {
                 return ResponseEntity.badRequest().body(
                         new CommonResponseDto(fieldError.getDefaultMessage(), HttpStatus.BAD_REQUEST.value()));
             }
+        }try {
+            userService.signup(signupRequestDto);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(
+                    new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
-        userService.signup((signupRequestDto));
         return ResponseEntity.status(HttpStatus.OK.value()).body((
                 new CommonResponseDto("성공적으로 회원가입에 성공했습니다.", HttpStatus.OK.value())));
     }
@@ -55,7 +53,7 @@ public class UserController {
                                                    HttpServletResponse httpResponse){
         try {
             userService.login(loginRequestDto);
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
 
@@ -63,9 +61,46 @@ public class UserController {
 
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
-    @RequestMapping("/logout")
+
+    @PostMapping("/logout")
     public ResponseEntity logout(HttpSession session){
         session.invalidate();
         return ResponseEntity.ok().body(new CommonResponseDto("로그아웃 성공", HttpStatus.OK.value()));
+    }
+
+    // url이랑(GetMapping으로 수정), 메서드명 수정(RESTfUL하게)
+    @GetMapping ("/mypage")
+    public ResponseEntity<CommonResponseDto> mypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        UserResponseDto userResponseDto;
+        try {
+            userResponseDto = userService.viewMypage(userDetails);
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(userResponseDto);
+    }
+
+    // url이랑, 메서드명 수정(RESTfUL하게)
+    @PostMapping("/checkpwd")
+    public ResponseEntity<CommonResponseDto> checkPwd(@RequestBody PwdCheckRequestDto pwdCheckRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        try {
+            userService.checkPwd(pwdCheckRequestDto,userDetails);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.ok().body(new CommonResponseDto("회원정보 수정페이지로 가기", HttpStatus.OK.value()));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<CommonResponseDto> update(@RequestBody UserUpdateRequestdTO userRequestDto,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
+        UserResponseDto userResponseDto;
+        try {
+            userResponseDto = userService.updateUserService(userRequestDto, userDetails);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.status(HttpStatus.OK.value()).body(userResponseDto);
     }
 }

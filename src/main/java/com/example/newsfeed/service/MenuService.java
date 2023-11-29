@@ -56,6 +56,9 @@ public class MenuService {
             menuResponseDto = new MenuResponseDto(m);
             menuResponseDtoList.add(menuResponseDto);
         }
+        if(menuResponseDtoList.isEmpty()){
+            throw  new IllegalArgumentException("해당 유저는 글을 작성하지 않았습니다.");
+        }
         return menuResponseDtoList;
     }
 
