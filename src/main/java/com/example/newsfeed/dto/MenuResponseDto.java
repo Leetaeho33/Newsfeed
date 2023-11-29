@@ -18,7 +18,7 @@ public class MenuResponseDto extends CommonResponseDto{
     private String authorNickname;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<CommentResponseDto> commentList = new ArrayList<>();
+    private List<CommentResponseDto> commentList;
 
     public MenuResponseDto(Menu menu) {
         this.id = menu.getId();
