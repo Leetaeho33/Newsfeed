@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -136,7 +137,35 @@ class MenuRepositoryTest {
         assertTrue(resultList.isEmpty());
     }
 
+    @DisplayName("findAll(Sort.by(Sort.Direction.DESC, \"createdAt\")")
+    @Test
+    void findAllTest(){
+        //given
+        menuRequestDto.setTitle("테스트용 제목");
+        menuRequestDto.setContent("테스트용 내용");
 
+        //첫번째 메뉴 저장
+        menu = new Menu(menuRequestDto);
+        menu.setUser(user);
+        menuRepository.save(menu);
+
+        //두번째 메뉴 저장
+        menuRequestDto.setTitle("테스트용 제목2");
+        menuRequestDto.setContent("테스트용 내용2");
+
+        Menu menu2 = new Menu(menuRequestDto);
+        menu2.setUser(user);
+        menuRepository.save(menu2);
+
+        List<Menu> resultList;
+
+        //when
+        resultList = menuRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        //then
+        assertEquals(resultList.get(0), menu2);
+        assertEquals(resultList.get(1), menu);
+    }
 
     @Test
     @DisplayName("Delete Method Test")
