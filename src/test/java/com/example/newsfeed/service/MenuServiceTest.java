@@ -116,7 +116,7 @@ public class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("getMenuByMenuId Throw IllegalArgumentException")
+    @DisplayName("getMenuByMenuId Test")
     void getMenuByMenuIdTest() {
         //given
         menuRequestDto.setTitle("게시글 제목");
