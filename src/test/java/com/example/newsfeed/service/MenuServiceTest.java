@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -86,7 +87,7 @@ public class MenuServiceTest {
 
 
     @Test
-    void getAll() {
+    void getAllTest() {
         //given
         menuRequestDto.setTitle("게시글 제목");
         menuRequestDto.setContent("게시글 내용");
@@ -133,12 +134,23 @@ public class MenuServiceTest {
 
     }
 
-    @Test
-    void getMenuByUserId() {
-    }
+//    @DisplayName("getMenuByMenuId Throw IllegalArgumentException")
+//    @Test
+//    void getMenuByUserIdExceptionTest() {
+//        //given
+//        menuRequestDto.setTitle("게시글 제목");
+//        menuRequestDto.setContent("게시글 내용");
+//        menu = new Menu(menuRequestDto);
+//        menu.setId(fakeId);
+//        menu.setUser(user);
+//        given(menuRepository.findById(2L)).willThrow(IllegalArgumentException.class);
+//
+//        //when & then
+//        assertThrows(IllegalAccessException.class, () -> menuRepository.findById(2L));
+//    }
 
     @Test
-    void updateMenu() {
+    void updateMenuTest() {
         //given
         menuRequestDto.setTitle("수정된 글 제목");
         menuRequestDto.setContent("수정된 글 내용");
