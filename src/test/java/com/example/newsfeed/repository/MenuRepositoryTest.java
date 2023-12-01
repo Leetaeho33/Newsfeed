@@ -108,6 +108,36 @@ class MenuRepositoryTest {
         assertEquals(resultList.get(1).getId(), menu2.getId());
     }
 
+    @DisplayName("findMenuByUserId isEmpty() Test")
+    @Test
+    void findMenuByUserIdFailTest() {
+        //given
+        menuRequestDto.setTitle("테스트용 제목");
+        menuRequestDto.setContent("테스트용 내용");
+
+        //첫번째 메뉴 저장
+        menu = new Menu(menuRequestDto);
+        menu.setUser(user);
+        menuRepository.save(menu);
+
+        //두번째 메뉴 저장
+        menuRequestDto.setTitle("테스트용 제목2");
+        menuRequestDto.setContent("테스트용 내용2");
+
+        Menu menu2 = new Menu(menuRequestDto);
+        menu2.setUser(user);
+        menuRepository.save(menu2);
+
+        List<Menu> resultList;
+        //when
+        resultList = menuRepository.findMenuByUserId(3L);
+
+        //then
+        assertTrue(resultList.isEmpty());
+    }
+
+
+
     @Test
     @DisplayName("Delete Method Test")
     void deleteTest(){
