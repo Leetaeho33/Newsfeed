@@ -23,7 +23,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @DisplayName("MenuService Test")
 @ExtendWith(MockitoExtension.class)
@@ -117,7 +116,21 @@ public class MenuServiceTest {
     }
 
     @Test
-    void getMenuByMenyId() {
+    @DisplayName("getMenuByMenuId Throw IllegalArgumentException")
+    void getMenuByMenuIdTest() {
+        //given
+        menuRequestDto.setTitle("게시글 제목");
+        menuRequestDto.setContent("게시글 내용");
+        menu = new Menu(menuRequestDto);
+        menu.setId(fakeId);
+        menu.setUser(user);
+        given(menuRepository.findById(1L)).willReturn(Optional.of(menu));
+
+        //when
+        result = menuService.getMenuByMenuId(1L);
+        //then
+        assertEquals(result.getId(), menu.getId());
+
     }
 
     @Test
@@ -126,7 +139,7 @@ public class MenuServiceTest {
 
     @Test
     void updateMenu() {
-        //givne
+        //given
         menuRequestDto.setTitle("수정된 글 제목");
         menuRequestDto.setContent("수정된 글 내용");
         //menuId로 찾은 menu를 given
