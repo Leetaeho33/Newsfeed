@@ -1,6 +1,5 @@
 package com.example.newsfeed.service;
 
-import com.example.newsfeed.dto.CommonResponseDto;
 import com.example.newsfeed.dto.MenuRequestDto;
 import com.example.newsfeed.dto.MenuResponseDto;
 import com.example.newsfeed.entity.Menu;
@@ -12,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -43,7 +40,7 @@ public class MenuService {
             return menuResponseDtoList;
     }
 
-    public MenuResponseDto getMenuByMenyId(Long menuId){
+    public MenuResponseDto getMenuByMenuId(Long menuId){
         menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글 ID 입니다."));
         return new MenuResponseDto(menu);

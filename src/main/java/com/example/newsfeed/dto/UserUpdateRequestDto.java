@@ -3,8 +3,11 @@ package com.example.newsfeed.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import jakarta.websocket.server.ServerEndpoint;
+import lombok.*;
 
+
+@Setter
 @Getter
 public class UserUpdateRequestDto {
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")

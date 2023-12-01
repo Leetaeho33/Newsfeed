@@ -73,9 +73,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateUserService(UserUpdateRequestDto userUpdateRequestdTO, UserDetailsImpl userDetails) {
+    public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, UserDetailsImpl userDetails) {
         user = userDetails.getUser();
-        user.updateUser(userUpdateRequestdTO);
+        user.updateUser(userUpdateRequestDto.getEmail(), userUpdateRequestDto.getNickname(), userUpdateRequestDto.getProfile());
         userRepository.save(user);
         return new UserResponseDto(user);
     }

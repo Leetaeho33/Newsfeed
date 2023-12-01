@@ -53,9 +53,9 @@ public class User {
         this.profile = signupRequestDto.getProfile();
     }
 
-    public void updateUser(UserUpdateRequestDto userUpdateRequestdTO){
-        this.email = userUpdateRequestdTO.getEmail();
-        this.nickname = userUpdateRequestdTO.getNickname();
-        this.profile=userUpdateRequestdTO.getProfile();
+        public void updateUser(String email, String nickname, String profile){
+            this.email = email;
+            this.nickname = nickname;
+            this.profile = profile;
     }
 }

@@ -6,13 +6,12 @@ import com.example.newsfeed.dto.MenuResponseDto;
 import com.example.newsfeed.entity.Comment;
 import com.example.newsfeed.entity.Menu;
 import com.example.newsfeed.entity.User;
-import com.example.newsfeed.repository.CommenetRepository;
+import com.example.newsfeed.repository.CommentRepository;
 import com.example.newsfeed.repository.MenuRepository;
 import com.example.newsfeed.userdetails.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.model.IComment;
 
 import java.util.concurrent.RejectedExecutionException;
 
@@ -20,7 +19,7 @@ import java.util.concurrent.RejectedExecutionException;
 @Service
 public class CommentService {
 
-    private final CommenetRepository commenetRepository;
+    private final CommentRepository commenetRepository;
     private final MenuRepository menuRepository;
     private User user;
     private Menu menu;
