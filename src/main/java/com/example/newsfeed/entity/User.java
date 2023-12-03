@@ -1,8 +1,9 @@
 package com.example.newsfeed.entity;
 
 import com.example.newsfeed.dto.SignupRequestDto;
-import com.example.newsfeed.dto.UserUpdateRequestdTO;
+import com.example.newsfeed.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Comment> commentList;
 
+    @Builder
     public User(String username, String pwd, String nickname, String email, String profile) {
         this.username = username;
         this.pwd = pwd;
@@ -51,9 +53,9 @@ public class User {
         this.profile = signupRequestDto.getProfile();
     }
 
-    public void updateUser(UserUpdateRequestdTO userUpdateRequestdTO){
-        this.email = userUpdateRequestdTO.getEmail();
-        this.nickname = userUpdateRequestdTO.getNickname();
-        this.profile=userUpdateRequestdTO.getProfile();
+        public void updateUser(String email, String nickname, String profile){
+            this.email = email;
+            this.nickname = nickname;
+            this.profile = profile;
     }
 }

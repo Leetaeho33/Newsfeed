@@ -51,9 +51,7 @@ public class CommentController {
         MenuResponseDto menuResponseDto;
         try{
             menuResponseDto = commentService.deleteComment(commentRequestDto, userDetails, commentId);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        } catch (RejectedExecutionException e){
+        } catch (IllegalArgumentException | RejectedExecutionException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
         return ResponseEntity.status(HttpStatus.OK.value()).

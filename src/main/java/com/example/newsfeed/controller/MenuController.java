@@ -47,7 +47,7 @@ public class MenuController {
     public ResponseEntity<CommonResponseDto> getMenuByMenuId(@PathVariable Long menuId) {
         MenuResponseDto menuResponseDto;
         try {
-            menuResponseDto = menuService.getMenuByMenyId(menuId);
+            menuResponseDto = menuService.getMenuByMenuId(menuId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
