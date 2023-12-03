@@ -6,6 +6,7 @@ import com.example.newsfeed.entity.Menu;
 import com.example.newsfeed.entity.User;
 import com.example.newsfeed.repository.MenuRepository;
 import com.example.newsfeed.userdetails.UserDetailsImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -41,15 +47,16 @@ public class MenuServiceTest {
     MenuRequestDto menuRequestDto = new MenuRequestDto();
     MenuResponseDto menuResponseDto, result;
 
+
     @BeforeEach
     @DisplayName("User & UserDetails Setup")
     void setup(){
         user = User.builder().
-                username("xogh").
-                pwd("12345678").
-                email("xoth@email.com").nickname("태호야").profile("한줄소개").
+                username("xogh").pwd("12345678").
+                email("xogh@email.com").nickname("태호야").profile("한줄소개").
                 build();
         user.setId(1L);
+        // token의 claims에서 뽑아왔다고 치고
         userDetails = new UserDetailsImpl(user);
     }
 
@@ -86,6 +93,7 @@ public class MenuServiceTest {
     }
 
 
+    @DisplayName("getAll Test")
     @Test
     void getAllTest() {
         //given
@@ -150,20 +158,48 @@ public class MenuServiceTest {
 //    }
 
     @Test
+    @DisplayName("updateMenu Test")
     void updateMenuTest() {
         //given
+        menuRequestDto.setTitle("게시글 제목");
+        menuRequestDto.setContent("게시글 내용");
+        menu = new Menu(menuRequestDto);
+        menu.setId(fakeId);
+        menu.setUser(user);
+
+            //menuId로 찾은 menu를 given
+        given(menuRepository.findById(menu.getId())).willReturn(Optional.of(menu));
+            // update정보를 갖는 RequestDto
         menuRequestDto.setTitle("수정된 글 제목");
         menuRequestDto.setContent("수정된 글 내용");
+
+        //when
+        menu.updateMenu(menuRequestDto);
+        result = menuService.updateMenu(menuRequestDto, menu.getId(), userDetails);
+
+        //then
+        assertEquals(result.getTitle(), menu.getTitle());
+        assertEquals(result.getContent(), menu.getContent());
+    }
+
+    @DisplayName("deleteMenu Test")
+    @Test
+    void deleteMenuTest() {
+        //given
+        menuRequestDto.setTitle("게시글 제목");
+        menuRequestDto.setContent("게시글 내용");
+        menu = new Menu(menuRequestDto);
+        menu.setId(fakeId);
+        menu.setUser(user);
+
         //menuId로 찾은 menu를 given
         given(menuRepository.findById(menu.getId())).willReturn(Optional.of(menu));
-        menu.updateMenu(menuRequestDto);
+
         //when
 
         //then
-    }
 
-    @Test
-    void deleteMenu() {
+        // 어떻게 보여주지..? repository의 findby도 못쓰고.. reeturn 타입이 void인데..
     }
 
     @Test
