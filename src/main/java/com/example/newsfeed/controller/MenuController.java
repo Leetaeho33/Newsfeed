@@ -22,7 +22,7 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping
-    public ResponseEntity<CommonResponseDto> post(@RequestBody MenuRequestDto menuRequestDto,
+    public ResponseEntity<CommonResponseDto> post (@RequestBody MenuRequestDto menuRequestDto,
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         MenuResponseDto menuResponseDto = menuService.post(menuRequestDto, userDetails);
